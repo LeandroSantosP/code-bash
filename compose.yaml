@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  database-bug-bash:
+    image: postgres:16
+    container_name: bug_bash_db
+    environment:
+      POSTGRES_DB: bug_bash
+      POSTGRES_USER: bug_bash
+      POSTGRES_PASSWORD: bug_bash
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+

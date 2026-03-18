@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: bug-bash
+
+  datasource:
+    password: bug_bash
+    username: bug_bash
+    url: jdbc:postgresql://localhost:5432/bug_bash
+    driver-class-name: org.postgresql.Driver
+
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    '[org.springframework]': debug
+      
+      
