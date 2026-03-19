@@ -10,14 +10,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
 @AllArgsConstructor
+@ToString
 @NoArgsConstructor
 @Table("analyses")
 public class Analysis {
-
     @Id
     private UUID id;
     private UUID submissionId;
