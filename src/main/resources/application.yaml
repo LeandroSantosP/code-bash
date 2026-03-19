@@ -15,8 +15,5 @@ spring:
     init:
       mode: always
 
-logging:
-  level:
-    '[org.springframework]': debug
       
       
