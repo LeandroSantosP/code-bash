@@ -9,12 +9,12 @@
 		<version>4.0.3</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>bug-bash</artifactId>
+	<groupId>com.leandrosps</groupId>
+	<artifactId>devroast</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name />
-	<description />
-	<url />
+	<name>DevRoast</name>
+	<description>AI-powered code reviewer that delivers brutally honest, entertaining, and constructive feedback</description>
+	<url>https://github.com/leandrosps/devroast</url>
 	<licenses>
 		<license />
 	</licenses>
