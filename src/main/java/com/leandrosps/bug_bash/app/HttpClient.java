@@ -1,5 +1,6 @@
 package com.leandrosps.bug_bash.app;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -12,16 +13,20 @@ import com.leandrosps.bug_bash.entriesobj.OllamaResponse;
 public class HttpClient {
 	static private RestTemplate restTemplate = new RestTemplate();;
 	static private String baseUrl = "http://localhost:8080";
-	static private String baseUrlOllama = "http://localhost:11434";
+
+	@Value("${ollama.url:http://localhost:11434}")
+	private String baseUrlOllama;
+
 	static HttpClient instance;
 
 	private HttpClient() {
 	}
 
-	public record OllamaRequest(String model, String prompt, boolean stream) {
+	public record OllamaRequest(@Value("${ollama.model:codellama}") String model, String prompt, boolean stream) {
 	}
 
 	public OllamaResponse sendCodeOllame(OllamaRequest input) {
+
 		ResponseEntity<OllamaResponse> response = restTemplate.postForEntity(baseUrlOllama + "/api/generate", input,
 				OllamaResponse.class);
 

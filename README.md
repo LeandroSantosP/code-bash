@@ -1,8 +1,8 @@
-# DevRoast
+# CodeBash
 
 > Your code's worst nightmare — an AI-powered code reviewer that doesn't sugarcoat.
 
-DevRoast is a brutally honest, AI-powered code review API that delivers instant, entertaining, and genuinely constructive feedback on your code. Submit your code, enable **Roast Mode** for maximum sarcasm, and get categorized feedback with fix suggestions. Compete on the Shame Leaderboard to see how your code stacks up against the worst on the internet.
+CodeBash is a brutally honest, AI-powered code review API that delivers instant, entertaining, and genuinely constructive feedback on your code. Submit your code, enable **Roast Mode** for maximum sarcasm, and get categorized feedback with fix suggestions. Compete on the Shame Leaderboard to see how your code stacks up against the worst on the internet.
 
 ## Features
 
@@ -87,7 +87,7 @@ Configuration is managed via `src/main/resources/application.yaml`. Key settings
 
 | Property | Description | Default |
 |----------|-------------|---------|
-| `spring.datasource.url` | PostgreSQL connection URL | `jdbc:postgresql://localhost:5432/devroast` |
+| `spring.datasource.url` | PostgreSQL connection URL | `jdbc:postgresql://localhost:5432/bug_bash` |
 | `spring.datasource.username` | Database username | `postgres` |
 | `spring.datasource.password` | Database password | `postgres` |
 

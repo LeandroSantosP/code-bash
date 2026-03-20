@@ -15,5 +15,6 @@ spring:
     init:
       mode: always
 
-      
-      
+ollama:
+  model: "codellama"  # This is the default value
+  base-url: "http://localhost:11434"
