@@ -16,27 +16,32 @@ services:
       - bug-bash-network
 
   ollama:
-      container_name: ollama
-      image: ollama/ollama
-      networks:
-      - bug-bash-network
-      volumes:
-        - ollama_data:/root/.ollama
-      entrypoint: ["/bin/sh", "-c", "ollama serve"]
+    container_name: ollama
+    image: ollama/ollama
+    networks:
+    - bug-bash-network
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: ["/bin/sh", "-c", "ollama serve"]
 
   app:
     container_name: bug_bash_app
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev      
     ports:
       - "8080:8080"
+    volumes:
+      - ./src:/app/src                 
+      - ./pom.xml:/app/pom.xml
     depends_on:
       - database-bug-bash
+      - ollama
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
       - bug-bash-network
     environment:
-      # Overriding properties via environment variables
       SPRING_DATASOURCE_URL: jdbc:postgresql://database-bug-bash:5432/bug_bash
       OLLAMA_URL: http://ollama:11434
       OLLAMA_MODEL: codellama

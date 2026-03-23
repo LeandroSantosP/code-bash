@@ -5,16 +5,24 @@ spring:
   application:
     name: bug-bash
 
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
   datasource:
     password: bug_bash
     username: bug_bash
     url: jdbc:postgresql://localhost:5432/bug_bash
     driver-class-name: org.postgresql.Driver
-
+  
   sql:
     init:
-      mode: always
+      mode: never
 
 ollama:
   model: "codellama"  # This is the default value
-  base-url: "http://localhost:11434"
+  url: "http://localhost:11434"
+
+logging:
+  level:
+    org.flywaydb: DEBUG

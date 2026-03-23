@@ -1,5 +1,6 @@
 package com.leandrosps.bug_bash.app;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class HttpClient {
 
 	static HttpClient instance;
 
+	private ModelMapper modelMapper = new ModelMapper();
+
 	private HttpClient() {
 	}
 
@@ -26,12 +29,12 @@ public class HttpClient {
 	}
 
 	public OllamaResponse sendCodeOllame(OllamaRequest input) {
-
 		ResponseEntity<OllamaResponse> response = restTemplate.postForEntity(baseUrlOllama + "/api/generate", input,
 				OllamaResponse.class);
 
 		Assert.isTrue(response.getStatusCode().equals(HttpStatusCode.valueOf(200)),
 				"Failed to request Ollama API: " + response.getBody());
+
 		return response.getBody();
 	}
 
