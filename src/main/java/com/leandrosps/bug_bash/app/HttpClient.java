@@ -1,6 +1,5 @@
 package com.leandrosps.bug_bash.app;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +18,6 @@ public class HttpClient {
 	private String baseUrlOllama;
 
 	static HttpClient instance;
-
-	private ModelMapper modelMapper = new ModelMapper();
 
 	private HttpClient() {
 	}
