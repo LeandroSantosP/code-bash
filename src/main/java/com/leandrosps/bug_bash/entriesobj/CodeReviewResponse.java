@@ -6,7 +6,7 @@ public record CodeReviewResponse(
 
 		@JsonProperty("feedbackMessage") String feedbackMessage,
 
-		SeverityObj severity, // "low", "medium" or "high"
+		@JsonProperty("severity") SeverityObj severity, // "low", "medium" or "high"
 
 		Integer score // 0 to 10
 ) {

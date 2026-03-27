@@ -17,10 +17,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table("submissions")
 public class Submission {
-    @Id
-    private UUID id;
-    private String code;
-    private boolean roastMode;
-    private int score;
-    private Instant createdAt;
+	@Id
+	private UUID id;
+	private String code;
+	private boolean roastMode;
+	private int score;
+	private Instant createdAt;
 }
