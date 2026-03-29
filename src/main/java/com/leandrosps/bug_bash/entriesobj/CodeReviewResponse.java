@@ -8,6 +8,10 @@ public record CodeReviewResponse(
 
 		@JsonProperty("severity") SeverityObj severity, // "low", "medium" or "high"
 
+		@JsonProperty("suggestedCode") String suggestedCode,
+
+		@JsonProperty("explanation") String explanation,
+
 		Integer score // 0 to 10
 ) {
 }

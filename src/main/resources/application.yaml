@@ -21,6 +21,7 @@ spring:
 
 ollama:
   model: "codellama"  # This is the default value
+  #url: "http://ollama:11434"
   url: "http://localhost:11434"
 
 logging:

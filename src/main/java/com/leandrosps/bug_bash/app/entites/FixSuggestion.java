@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table("fix_suggestions")
 public class FixSuggestion {
-    @Id
-    private UUID id;
-    private UUID analysisId;
-    private String originalCode;
-    private String suggestedCode;
-    private String explanation;
-    private Instant createdAt;
+	@Id
+	private UUID id;
+	private UUID analysisId;
+	private String originalCode;
+	private String suggestedCode;
+	private String explanation;
+	private Instant createdAt;
 }

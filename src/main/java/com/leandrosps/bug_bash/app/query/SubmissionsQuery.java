@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.leandrosps.bug_bash.app.db.FixSuggestionRepository;
 import com.leandrosps.bug_bash.app.db.SubmissionsRepository;
 import com.leandrosps.bug_bash.app.entites.Analysis;
 import com.leandrosps.bug_bash.app.erros.SubmissionsNotFoundException;
@@ -15,8 +16,11 @@ import com.leandrosps.bug_bash.app.erros.SubmissionsNotFoundException;
 public class SubmissionsQuery {
 
 	public record GetSubmissionByIdResponse(UUID id, String code, boolean roastMode, int score, Instant createdAt,
-			List<Analysis> analyses) {
+			String suggestedCode, String explanation, List<Analysis> analyses) {
 	}
+
+	@Autowired
+	private FixSuggestionRepository fixSuggestionRepository;
 
 	@Autowired
 	private SubmissionsRepository submissionsRepository;
@@ -26,7 +30,11 @@ public class SubmissionsQuery {
 				.orElseThrow(() -> new SubmissionsNotFoundException(id));
 
 		var analysesOut = submissionsRepository.findAnalysesBySubmissionId(UUID.fromString(id));
+
+		var suggestion = fixSuggestionRepository.findByAnalysisId(analysesOut.get(0).getId());
+
 		return new GetSubmissionByIdResponse(submissionOut.getId(), submissionOut.getCode(), submissionOut.isRoastMode(),
-				submissionOut.getScore(), submissionOut.getCreatedAt(), analysesOut);
+				submissionOut.getScore(), submissionOut.getCreatedAt(), suggestion.getSuggestedCode(),
+				suggestion.getExplanation(), analysesOut);
 	}
 }

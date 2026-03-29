@@ -12,8 +12,6 @@ import com.leandrosps.bug_bash.entriesobj.OllamaResponse;
 @Component
 public class HttpClient {
 	static private RestTemplate restTemplate = new RestTemplate();;
-	static private String baseUrl = "http://localhost:8080";
-
 	@Value("${ollama.url:http://localhost:11434}")
 	private String baseUrlOllama;
 
