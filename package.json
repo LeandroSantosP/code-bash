@@ -1,0 +1,21 @@
+{
+  "name": "devroast-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "preview:frontend": "npm --prefix frontend run preview",
+    "dev:backend": "./backend/mvnw -f backend/pom.xml spring-boot:run",
+    "test:backend": "./backend/mvnw -f backend/pom.xml test",
+    "build:backend": "./backend/mvnw -f backend/pom.xml clean package",
+    "docker:dev:up": "docker compose -f infra/docker-compose.dev.yml up -d",
+    "docker:dev:down": "docker compose -f infra/docker-compose.dev.yml down",
+    "docker:prod:up": "docker compose -f infra/docker-compose.prod.yml up -d",
+    "docker:prod:down": "docker compose -f infra/docker-compose.prod.yml down"
+  }
+}
