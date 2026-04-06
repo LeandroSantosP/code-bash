@@ -9,6 +9,12 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080
+
   datasource:
     password: bug_bash
     username: bug_bash
@@ -23,6 +29,9 @@ ollama:
   model: "codellama"  # This is the default value
   #url: "http://ollama:11434"
   url: "http://localhost:11434"
+
+
+
 
 logging:
   level:

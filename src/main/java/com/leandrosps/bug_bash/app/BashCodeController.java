@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.leandrosps.bug_bash.app.BashCode.RostInput;
@@ -31,12 +32,21 @@ public class BashCodeController {
 	@Autowired
 	private SubmissionsQuery submissionsQuery;
 
-	@GetMapping("/actuator/health")
+	@RestController
+	public class CallbackController {
+
+		@GetMapping("/login/oauth2/code/minha-api-client")
+		public ResponseEntity<String> callback(@RequestParam String code) {
+			return ResponseEntity.ok("Seu code: " + code);
+		}
+	}
+
+	@GetMapping("/api/actuator/health")
 	public ResponseEntity<String> health() {
 		return ResponseEntity.ok("Server is healthy and ready to receive your code.");
 	}
 
-	@PostMapping("/bash-code")
+	@PostMapping("/api/bash-code")
 	public String send_code(@RequestBody BashCodeRequest request) {
 		return bashCode.exec(new RostInput(request.code(), request.roastMode()));
 	}
