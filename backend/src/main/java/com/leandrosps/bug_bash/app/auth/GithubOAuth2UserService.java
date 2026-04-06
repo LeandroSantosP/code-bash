@@ -52,4 +52,5 @@ public class GithubOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 		System.out.println("User " + savedUser.getUsername() + " logged in with GitHub");
 		return oauth2User;
 	}
+
 }
