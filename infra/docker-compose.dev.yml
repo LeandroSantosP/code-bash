@@ -1,0 +1,66 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: devroast_postgres_dev
+    environment:
+      POSTGRES_DB: bug_bash
+      POSTGRES_USER: bug_bash
+      POSTGRES_PASSWORD: bug_bash
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  ollama:
+    image: ollama/ollama
+    container_name: devroast_ollama_dev
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data_dev:/root/.ollama
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama serve &
+        until curl -s http://localhost:11434/api/tags > /dev/null; do sleep 2; done
+        ollama pull codellama
+        wait
+
+  backend:
+    container_name: devroast_backend_dev
+    build:
+      context: ../backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../backend/src:/app/src
+      - ../backend/pom.xml:/app/pom.xml
+    depends_on:
+      - postgres
+      - ollama
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bug_bash
+      OLLAMA_URL: http://ollama:11434
+      OLLAMA_MODEL: codellama
+
+  frontend:
+    image: node:22-alpine
+    container_name: devroast_frontend_dev
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ../frontend:/app
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://backend:8080
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+
+volumes:
+  postgres_data_dev:
+  ollama_data_dev:

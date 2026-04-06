@@ -1,125 +1,82 @@
-# CodeBash
+# DevRoast Monorepo
 
-> Your code's worst nightmare — an AI-powered code reviewer that doesn't sugarcoat.
+Monorepo containing the DevRoast backend API and frontend web app.
 
-CodeBash is a brutally honest, AI-powered code review API that delivers instant, entertaining, and genuinely constructive feedback on your code. Submit your code, enable **Roast Mode** for maximum sarcasm, and get categorized feedback with fix suggestions. Compete on the Shame Leaderboard to see how your code stacks up against the worst on the internet.
+## Structure
 
-## Features
+```
+backend/                      # Spring Boot API (Java 21)
+frontend/                     # React + Vite + TypeScript app
+infra/                        # Docker Compose files (dev/prod)
+meu-projeto.code-workspace    # VS Code multi-root workspace
+package.json                  # Root npm scripts for frontend/backend
+pom.xml                       # Root Maven aggregator (module: backend)
+```
 
-- **Code Submission** — Paste code snippets and receive instant quality ratings
-- **Roast Mode** — Toggle maximum sarcasm for entertaining code analysis
-- **Detailed Analysis** — Categorized feedback by severity (critical, warning, good)
-- **Fix Suggestions** — Visual diffs demonstrating improvements
-- **Shame Leaderboard** — Compete for the title of worst code on the internet
-
-## Tech Stack
-
-- **Java 21** with **Spring Boot 4.0**
-- **PostgreSQL 16** for persistence
-- **Ollama** for AI-powered code analysis
-- **Lombok** for boilerplate reduction
-- **Maven** for build management
-
-## Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Java 21+
-- Maven 3.8+
-- Docker (for PostgreSQL)
-- [Ollama](https://ollama.ai/) running locally
+- Node.js 22+
+- npm 10+
+- Docker (for PostgreSQL and Ollama, if using compose)
 
-### Setup
+## Backend
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd bug-bash
-   ```
-
-2. **Start PostgreSQL with Docker**
-   ```bash
-   docker compose up -d
-   ```
-
-3. **Start Ollama**
-   ```bash
-   ollama serve
-   # In another terminal:
-   ollama pull codellama
-   ```
-
-4. **Run the application**
-   ```bash
-   mvn spring-boot:run
-   ```
-
-The API will be available at `http://localhost:8080`.
-
-## API Endpoints
-
-### Submit Code for Review
+Run backend locally:
 
 ```bash
-curl -X POST http://localhost:8080/bash-code \
-  -H "Content-Type: application/json" \
-  -d '{"code": "function test(){console.log(\"hello\")}", "roastMode": true}'
+cd backend
+./mvnw spring-boot:run
 ```
 
-**Response:**
-```json
-{
-  "feedbackMessage": "Congratulations! You've written code that would make a medieval scribe weep...",
-  "severity": "high",
-  "score": 2
-}
-```
-
-### Health Check
+Run backend tests:
 
 ```bash
-curl http://localhost:8080/bash-code/health
+cd backend
+./mvnw test
 ```
 
-## Configuration
+Start full development stack with Docker Compose:
 
-Configuration is managed via `src/main/resources/application.yaml`. Key settings:
-
-| Property | Description | Default |
-|----------|-------------|---------|
-| `spring.datasource.url` | PostgreSQL connection URL | `jdbc:postgresql://localhost:5432/bug_bash` |
-| `spring.datasource.username` | Database username | `postgres` |
-| `spring.datasource.password` | Database password | `postgres` |
-
-## Project Structure
-
-```
-src/main/java/com/leandrosps/bug_bash/
-├── Application.java              # Spring Boot entry point
-├── app/
-│   ├── BashCodeController.java   # REST API endpoints
-│   ├── HttpClient.java           # Ollama API client
-│   ├── SubmissionsRepository.java # Database repository
-│   └── entites/
-│       ├── Analysis.java        # Analysis entity
-│       └── Submission.java      # Submission entity
-└── entriesobj/
-    ├── CodeReviewResponse.java  # AI response DTOs
-    └── OllamaResponse.java      # Ollama API response
-```
-
-## Development
-
-### Running Tests
 ```bash
-mvn test
+docker compose -f infra/docker-compose.dev.yml up -d
 ```
 
-### Building
+Start production-like stack with Docker Compose:
+
 ```bash
-mvn clean package
+docker compose -f infra/docker-compose.prod.yml up -d
 ```
 
-## License
+## Frontend
 
-MIT
+Install and run frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Root Scripts
+
+From the repository root:
+
+```bash
+npm run dev:frontend
+npm run dev:backend
+npm run build:frontend
+npm run test:backend
+npm run docker:dev:up
+npm run docker:dev:down
+npm run docker:prod:up
+npm run docker:prod:down
+```
+
+## Build Monorepo Maven Module
+
+From the repository root:
+
+```bash
+mvn -pl backend clean package
+```
