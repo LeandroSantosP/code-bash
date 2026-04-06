@@ -44,7 +44,7 @@ public class GlobalConfig {
 	@Bean
 	@Order(2)
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.csrf(c -> c.disable()).securityMatcher("/api/**")
+		http.csrf(c -> c.disable()).securityMatcher("/api/**", "/public/**")
 				.authorizeHttpRequests(auth -> auth.requestMatchers("/public/**").permitAll().anyRequest().authenticated())
 				.oauth2ResourceServer(auth -> auth.jwt(Customizer.withDefaults()));
 		return http.build();

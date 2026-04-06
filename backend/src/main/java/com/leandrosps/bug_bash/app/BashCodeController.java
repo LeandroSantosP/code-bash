@@ -51,12 +51,12 @@ public class BashCodeController {
 		return bashCode.exec(new RostInput(request.code(), request.roastMode()));
 	}
 
-	@GetMapping("/get-rost/{id}")
+	@GetMapping("/api/get-rost/{id}")
 	public ResponseEntity<GetSubmissionByIdResponse> get_roast_by_id(@PathVariable String id) {
 		return ResponseEntity.ok(submissionsQuery.getSubmissionById(id));
 	}
 
-	@DeleteMapping("/delete-rost/{id}")
+	@DeleteMapping("/api/delete-rost/{id}")
 	public ResponseEntity<Void> delete_roast_by_id(@PathVariable UUID id) {
 		submissionsRepository.deleteById(id);
 		return ResponseEntity.ok().build();

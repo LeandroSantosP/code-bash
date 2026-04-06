@@ -21,8 +21,8 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		var localUser = localUserRepository.findByUsername(username)
 				.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-
 		return User.withUsername(localUser.getUsername()).password(localUser.getPasswordHash()).roles(localUser.getRole())
 				.disabled(!localUser.isEnabled()).build();
 	}
+
 }

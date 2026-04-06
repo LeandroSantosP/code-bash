@@ -6,7 +6,10 @@ import java.util.UUID;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import lombok.ToString;
+
 @Table("local_users")
+@ToString
 public class LocalUser {
 	@Id
 	private UUID id;

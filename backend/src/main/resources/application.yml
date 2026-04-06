@@ -45,3 +45,4 @@ ollama:
 logging:
     level:
         org.flywaydb: DEBUG
+        org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: ERROR
