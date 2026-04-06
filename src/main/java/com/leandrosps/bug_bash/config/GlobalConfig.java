@@ -6,11 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
@@ -20,18 +18,21 @@ import org.springframework.security.oauth2.server.authorization.client.InMemoryR
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 
+import com.leandrosps.bug_bash.app.auth.DatabaseUserDetailsService;
+import com.leandrosps.bug_bash.app.auth.GithubOAuth2UserService;
+
 @Configuration
-public class GloblaConfig {
+public class GlobalConfig {
 
 	@Bean
 	@Order(1)
 	public SecurityFilterChain authServerFilterChain(HttpSecurity http) throws Exception {
-		http.securityMatcher("/oauth2/**", "/.well-known/**")
+		http.securityMatcher("/oauth2/authorize", "/oauth2/token", "/oauth2/jwks", "/oauth2/introspect", "/oauth2/revoke",
+				"/.well-known/**", "/connect/**")
 				.oauth2AuthorizationServer(authorizationServer -> authorizationServer.oidc(Customizer.withDefaults()))
 				.authorizeHttpRequests(auth -> auth.anyRequest().authenticated()).exceptionHandling(
 						ex -> ex.defaultAuthenticationEntryPointFor(new LoginUrlAuthenticationEntryPoint("/login"),
@@ -51,10 +52,17 @@ public class GloblaConfig {
 
 	@Bean
 	@Order(3)
-	public SecurityFilterChain defaultFilterChain(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/login", "/error", "/login/oauth2/code/**").permitAll()
+	public SecurityFilterChain defaultFilterChain(HttpSecurity http, GithubOAuth2UserService githubOAuth2UserService,
+			DatabaseUserDetailsService databaseUserDetailsService, PasswordEncoder passwordEncoder) throws Exception {
+		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(databaseUserDetailsService);
+		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
 
-				.anyRequest().authenticated()).formLogin(Customizer.withDefaults());
+		http.authorizeHttpRequests(
+				auth -> auth.requestMatchers("/login", "/error", "/login/oauth2/code/**", "/oauth2/authorization/**")
+						.permitAll().anyRequest().authenticated())
+				.authenticationProvider(daoAuthenticationProvider).formLogin(form -> form.defaultSuccessUrl("/me", true))
+				.oauth2Login(oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(githubOAuth2UserService))
+						.defaultSuccessUrl("/me", true));
 		return http.build();
 	}
 
@@ -70,13 +78,6 @@ public class GloblaConfig {
 				.redirectUri("https://oauth.pstmn.io/v1/callback").scope(OidcScopes.OPENID).scope("profile").scope("read")
 				.scope("write").clientSettings(ClientSettings.builder().requireProofKey(false).build()).build();
 		return new InMemoryRegisteredClientRepository(client);
-
-	}
-
-	@Bean
-	public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-		UserDetails user = User.withUsername("joao").password(passwordEncoder.encode("senha123")).roles("USER").build();
-		return new InMemoryUserDetailsManager(user);
 	}
 
 	@Bean

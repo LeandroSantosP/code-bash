@@ -1,0 +1,47 @@
+server:
+    port: 8080
+
+spring:
+    config:
+        import: optional:file:.env[.properties]
+
+    application:
+        name: bug-bash
+
+    flyway:
+        enabled: true
+        baseline-on-migrate: true
+
+    security:
+        oauth2:
+            client:
+                registration:
+                    github:
+                        client-id: ${GITHUB_CLIENT_ID}
+                        client-secret: ${GITHUB_CLIENT_SECRET}
+                        scope:
+                            - read:user
+                            - user:email
+                        
+            resourceserver:
+                jwt:
+                    issuer-uri: http://localhost:8080
+
+    datasource:
+        password: bug_bash
+        username: bug_bash
+        url: jdbc:postgresql://localhost:5432/bug_bash
+        driver-class-name: org.postgresql.Driver
+
+    sql:
+        init:
+            mode: never
+
+ollama:
+    model: "codellama" # This is the default value
+    #url: "http://ollama:11434"
+    url: "http://localhost:11434"
+
+logging:
+    level:
+        org.flywaydb: DEBUG
