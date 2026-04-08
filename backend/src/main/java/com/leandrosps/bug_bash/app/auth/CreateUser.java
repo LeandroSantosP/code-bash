@@ -1,8 +1,9 @@
 package com.leandrosps.bug_bash.app.auth;
 
 import java.time.Instant;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,15 @@ import jakarta.validation.constraints.Size;
 @Service
 public class CreateUser {
 
-	@Autowired
-	private LocalUserRepository localUserRepository;
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateUser.class);
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final LocalUserRepository localUserRepository;
+	private final PasswordEncoder passwordEncoder;
+
+	public CreateUser(LocalUserRepository localUserRepository, PasswordEncoder passwordEncoder) {
+		this.localUserRepository = localUserRepository;
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	public record InputCreateUser(
 			@NotBlank(message = "username is required") @Size(min = 3, max = 30, message = "username must be between 3 and 30 characters") String username,
@@ -30,7 +35,7 @@ public class CreateUser {
 
 	public void exec(InputCreateUser input) {
 		this.localUserRepository.findByUsername(input.username()).ifPresentOrElse(existingUser -> {
-			throw new AppException("Invalid user User", HttpStatus.BAD_REQUEST);
+			throw new AppException("username already exists", HttpStatus.BAD_REQUEST);
 		}, () -> {
 			LocalUser user = new LocalUser();
 			user.setUsername(input.username());
@@ -38,8 +43,9 @@ public class CreateUser {
 			user.setRole("USER");
 			user.setEnabled(true);
 			user.setCreatedAt(Instant.now());
-			System.out.println("Creating user: " + user.toString());
+			LOGGER.info("creating local user with username={}", user.getUsername());
 			this.localUserRepository.save(user);
 		});
 	}
+
 }

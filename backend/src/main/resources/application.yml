@@ -1,6 +1,16 @@
 server:
     port: 8080
 
+app:
+    base-url: ${APP_BASE_URL}
+    frontend-url: ${APP_FRONTEND_URL}
+
+auth:
+    client-id: ${AUTH_CLIENT_ID}
+    client-secret: ${AUTH_CLIENT_SECRET}
+    redirect-uri-local: ${AUTH_REDIRECT_URI_LOCAL}
+    redirect-uri-postman: ${AUTH_REDIRECT_URI_POSTMAN}
+
 spring:
     config:
         import: optional:file:.env[.properties]
@@ -25,12 +35,12 @@ spring:
                         
             resourceserver:
                 jwt:
-                    issuer-uri: http://localhost:8080
+                    issuer-uri: ${app.base-url}
 
     datasource:
-        password: bug_bash
-        username: bug_bash
-        url: jdbc:postgresql://localhost:5432/bug_bash
+        password: ${DB_PASSWORD}
+        username: ${DB_USERNAME}
+        url: ${DB_URL}
         driver-class-name: org.postgresql.Driver
 
     sql:
@@ -39,8 +49,7 @@ spring:
 
 ollama:
     model: "codellama" # This is the default value
-    #url: "http://ollama:11434"
-    url: "http://localhost:11434"
+    url: ${OLLAMA_URL}
 
 logging:
     level:
