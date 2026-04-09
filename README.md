@@ -36,6 +36,24 @@ cd backend
 ./mvnw test
 ```
 
+### Backend environment variables
+
+The backend loads environment values from `backend/.env` (see `backend/.env.example`).
+When running with Docker Compose, the backend service also uses `env_file` and overrides
+container-specific endpoints (for example `DB_URL` to `postgres` and `OLLAMA_URL` to `ollama`).
+
+For GitHub OAuth to work locally, ensure your OAuth App callback exactly matches:
+
+```text
+http://localhost:8080/login/oauth2/code/github
+```
+
+And set:
+
+```bash
+GITHUB_REDIRECT_URI=http://localhost:8080/login/oauth2/code/github
+```
+
 Start full development stack with Docker Compose:
 
 ```bash
