@@ -8,10 +8,15 @@ Monorepo containing the DevRoast backend API and frontend web app.
 backend/                      # Spring Boot API (Java 21)
 frontend/                     # React + Vite + TypeScript app
 infra/                        # Docker Compose files (dev/prod)
+docs/                         # Project documentation artifacts
 meu-projeto.code-workspace    # VS Code multi-root workspace
 package.json                  # Root npm scripts for frontend/backend
 pom.xml                       # Root Maven aggregator (module: backend)
 ```
+
+## Architecture
+
+- Interactive architecture diagram (HTML): `docs/architecture/architecture-diagram.html`
 
 ## Prerequisites
 
