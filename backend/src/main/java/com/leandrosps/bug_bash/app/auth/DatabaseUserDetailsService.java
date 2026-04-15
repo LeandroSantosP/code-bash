@@ -24,5 +24,4 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 		return User.withUsername(localUser.getUsername()).password(localUser.getPasswordHash()).roles(localUser.getRole())
 				.disabled(!localUser.isEnabled()).build();
 	}
-
 }

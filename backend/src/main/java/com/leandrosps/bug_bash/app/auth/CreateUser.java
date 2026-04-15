@@ -47,5 +47,4 @@ public class CreateUser {
 			this.localUserRepository.save(user);
 		});
 	}
-
 }
